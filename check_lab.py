@@ -62,13 +62,14 @@ def run_tests() -> tuple[int, int]:
         summary = lines[-1] if lines else ""
         # Parse "X passed, Y failed" or "X passed"
         passed = total = 0
-        for part in summary.split(","):
-            part = part.strip()
-            if "passed" in part:
-                passed = int(part.split()[0])
-                total += passed
-            if "failed" in part:
-                total += int(part.split()[0])
+        import re
+        m_passed = re.search(r'(\d+)\s+passed', summary)
+        m_failed = re.search(r'(\d+)\s+failed', summary)
+        if m_passed:
+            passed = int(m_passed.group(1))
+            total += passed
+        if m_failed:
+            total += int(m_failed.group(1))
         return passed, total
     except Exception as e:
         print(f"  ⚠️  pytest error: {e}")
