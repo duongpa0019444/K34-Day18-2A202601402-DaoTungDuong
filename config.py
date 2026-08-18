@@ -5,12 +5,20 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# --- Cache on D: drive to prevent C: disk full errors ---
+os.environ.setdefault("HF_HOME", os.path.join(os.path.dirname(__file__), ".cache", "huggingface"))
+os.environ.setdefault("TORCH_HOME", os.path.join(os.path.dirname(__file__), ".cache", "torch"))
+os.environ.setdefault("PYTHONIOENCODING", "utf-8")
+
 # --- API Keys ---
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", None)
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
 
 # --- Qdrant ---
-QDRANT_HOST = "localhost"
-QDRANT_PORT = 6333
+QDRANT_HOST = os.getenv("QDRANT_HOST", "localhost")
+QDRANT_PORT = int(os.getenv("QDRANT_PORT", 6333))
+QDRANT_PATH = os.getenv("QDRANT_PATH", os.path.join(os.path.dirname(__file__), "qdrant_storage"))
 COLLECTION_NAME = "lab18_production"
 NAIVE_COLLECTION = "lab18_naive"
 
